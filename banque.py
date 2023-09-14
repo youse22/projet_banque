@@ -33,6 +33,9 @@ while True:
     print(' ')
     
     match choice:
+
+        # user connection
+
         case 1:
             connection=False #pou teste si moun nan konekte
             compte={}
@@ -45,9 +48,11 @@ while True:
                     connection=True
                     break
                 else:
-                    connection=False
+                    # connection=False
                     print('\tincorrect information \n')
-                
+            if connection==False:
+                print('\tincorrect information \n')
+
             while connection:
                 if connection== True:
                     print('\t1.Balance')
@@ -61,34 +66,45 @@ while True:
                     break
                 
                 match choice1:
+
+                    # balance control
                     case '1':
                         print(f"\tYou have {compte['montant']} $")
+                    
+                    # Storage or depot
                     case '2':
-                        account.remove(compte)
+                        
                         montant=int(input('\tEnter the amount you want to put in : '))
-                        compte['montant']+=montant
-                        account.append(compte)
-                        print(f"\tYou have {compte['montant']} $ now ")
+                        if montant > 0:
+                            account.remove(compte)
+                            compte['montant']+=montant
+                            account.append(compte)
+                            print(f"\tYou have {compte['montant']} $ now ")
+                        else:
+                            print('\tThe amount you want to put in is invalid')
                         
                         with open('database','wb') as file:
                             pickle.dump(account,file)
+
+                    # Withdrawal or retrait
                     case '3':
-                       
-                        ret=int(input('\tenter the amount you want to withdraw : '))
-                        montant = ret
+                        
                         while True:
+                            ret=int(input('\tenter the amount you want to withdraw : '))
                             if ret>compte['montant']:
                                 print('\twithdrawal you ask the faith too much')
                                 
-                            else:
+                            elif 0 < ret < compte['montant']:
                                 account.remove(compte)
-                                compte['montant']-=montant
+                                compte['montant']-=ret
                                 account.append(compte)
                                 print(f"\tYou stay {compte['montant']} $ now")
 
                                 with open('database','wb') as file:
                                     pickle.dump(account,file)
-                            break
+                                break
+                            else:
+                                print("the amount is invalid")
         case 2:
             user_account={}
 
